@@ -4,7 +4,7 @@
     <key>package_description</key>
     <map>
       <key>canonical_repo</key>
-      <string>https://git.alchemyviewer.org/alchemy/thirdparty/3p-openal-soft</string>
+      <string>https://github.com/secondlife/3p-openal-soft</string>
       <key>copyright</key>
       <string>Copyright (C) 1999-2007 by authors.</string>
       <key>description</key>
