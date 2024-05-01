@@ -17,7 +17,7 @@ jobs:
         if: runner.os == 'linux'
         run: sudo apt update && sudo apt install -y libpulse-dev pipewire libasound2-dev libjack-dev
 
-      - uses: secondlife/action-autobuild@v3
+      - uses: secondlife/action-autobuild@v4
         with:
           addrsize: "64" 
   release:
