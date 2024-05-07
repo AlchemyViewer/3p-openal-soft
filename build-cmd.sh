@@ -269,13 +269,13 @@ pushd "$top/openal-soft"
 
             # create debug bundles
             pushd "${stage}/lib/debug"
-                install_name_tool -id "@rpath/libopenal.dylib" "libopenal.dylib"
+                install_name_tool -id "@executable_path/../Resources/libopenal.dylib" "libopenal.dylib"
                 dsymutil libopenal.dylib
                 strip -x -S libopenal.dylib
             popd
 
             pushd "${stage}/lib/release"
-                install_name_tool -id "@rpath/libopenal.dylib" "libopenal.dylib"
+                install_name_tool -id "@executable_path/../Resources/libopenal.dylib" "libopenal.dylib"
                 dsymutil libopenal.dylib
                 strip -x -S libopenal.dylib
             popd
@@ -563,13 +563,13 @@ pushd "$top/freealut"
 
             # create debug bundles
             pushd "${stage}/lib/debug"
-                install_name_tool -id "@rpath/libalut.dylib" "libalut.dylib"
+                install_name_tool -id "@executable_path/../Resources/libalut.dylib" "libalut.dylib"
                 dsymutil libalut.dylib
                 strip -x -S libalut.dylib
             popd
 
             pushd "${stage}/lib/release"
-                install_name_tool -id "@rpath/libalut.dylib" "libalut.dylib"
+                install_name_tool -id "@executable_path/../Resources/libalut.dylib" "libalut.dylib"
                 dsymutil libalut.dylib
                 strip -x -S libalut.dylib
             popd
