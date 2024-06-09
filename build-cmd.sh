@@ -87,32 +87,18 @@ pushd "$top/openal-soft"
             mkdir -p "${stage}/lib/debug"
             mkdir -p "${stage}/lib/release"
 
-            # Debug Build
-            mkdir -p "build_debug"
-            pushd "build_debug"
-
-                cmake -E env CFLAGS="$archflags /Zi" CXXFLAGS="$archflags /Zi" LDFLAGS="/DEBUG:FULL" \
-                cmake .. -G "$AUTOBUILD_WIN_CMAKE_GEN" -A "$AUTOBUILD_WIN_VSPLATFORM" -DCMAKE_BUILD_TYPE="Debug" \
-                    -DALSOFT_UTILS=OFF -DALSOFT_NO_CONFIG_UTIL=ON -DALSOFT_EXAMPLES=OFF \
-                    -DCMAKE_INSTALL_PREFIX="$(cygpath -m "$stage")"
-
-                cmake --build . --config Debug --clean-first
-
-                cp -a Debug/OpenAL32.{lib,dll,exp,pdb} "$stage/lib/debug/"
-            popd
-
-            # Release Build
+            # Build
             mkdir -p "build_release"
             pushd "build_release"
-
-                cmake -E env CFLAGS="$archflags /O2 /Ob3 /GL /Gy /Zi" CXXFLAGS="$archflags /O2 /Ob3 /GL /Gy /Zi /std:c++17 /permissive-" LDFLAGS="/LTCG /OPT:REF /OPT:ICF /DEBUG:FULL" \
-                cmake .. -G "$AUTOBUILD_WIN_CMAKE_GEN" -A "$AUTOBUILD_WIN_VSPLATFORM" -DCMAKE_BUILD_TYPE="Release" \
+                cmake .. -G "Ninja Multi-Config" \
                     -DALSOFT_UTILS=OFF -DALSOFT_NO_CONFIG_UTIL=ON -DALSOFT_EXAMPLES=OFF \
                     -DCMAKE_INSTALL_PREFIX="$(cygpath -m "$stage")"
 
-                cmake --build . --config Release --clean-first
+                cmake --build . --config Debug
+                cmake --build . --config Release
 
-                cp -a Release/OpenAL32.{lib,dll,exp,pdb} "$stage/lib/release/"
+                cp -a Debug/OpenAL32.{lib,dll,exp,pdb} "$stage/lib/debug/"
+                cp -a Release/OpenAL32.{lib,dll,exp} "$stage/lib/release/"
             popd
             cp include/AL/*.h $stage/include/AL/
 
@@ -268,9 +254,7 @@ pushd "$top/freealut"
             # Debug Build
             mkdir -p "build_debug"
             pushd "build_debug"
-
-                cmake -E env CFLAGS="$archflags /Zi" CXXFLAGS="$archflags /Zi" LDFLAGS="/DEBUG:FULL" \
-                cmake .. -G "$AUTOBUILD_WIN_CMAKE_GEN" -A "$AUTOBUILD_WIN_VSPLATFORM" -DCMAKE_BUILD_TYPE="Debug" \
+                cmake .. -G "Ninja Multi-Config" -DCMAKE_BUILD_TYPE="Debug" \
                     -DOPENAL_LIB_DIR="$(cygpath -m "$stage/lib/debug")" -DOPENAL_INCLUDE_DIR="$(cygpath -m "$stage/include")" \
                     -DBUILD_STATIC=OFF -DCMAKE_INSTALL_PREFIX="$(cygpath -m "$stage")"
 
@@ -282,15 +266,13 @@ pushd "$top/freealut"
             # Release Build
             mkdir -p "build_release"
             pushd "build_release"
-
-                cmake -E env CFLAGS="$archflags /O2 /Ob3 /GL /Gy /Zi" CXXFLAGS="$archflags /O2 /Ob3 /GL /Gy /Zi /std:c++17 /permissive-" LDFLAGS="/LTCG /OPT:REF /OPT:ICF /DEBUG:FULL" \
-                cmake .. -G "$AUTOBUILD_WIN_CMAKE_GEN" -A "$AUTOBUILD_WIN_VSPLATFORM" -DCMAKE_BUILD_TYPE="Release" \
+                cmake .. -G "Ninja Multi-Config" -DCMAKE_BUILD_TYPE="Release" \
                     -DOPENAL_LIB_DIR="$(cygpath -m "$stage/lib/release")" -DOPENAL_INCLUDE_DIR="$(cygpath -m "$stage/include")" \
                     -DBUILD_STATIC=OFF -DCMAKE_INSTALL_PREFIX="$(cygpath -m "$stage")"
 
                 cmake --build . --config Release --clean-first
 
-                cp -a Release/alut.{lib,dll,exp,pdb} "$stage/lib/release/"
+                cp -a Release/alut.{lib,dll,exp} "$stage/lib/release/"
             popd
             cp include/AL/*.h $stage/include/AL/
         ;;
