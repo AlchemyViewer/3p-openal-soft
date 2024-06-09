@@ -150,7 +150,7 @@ pushd "$top/openal-soft"
                 CXXFLAGS="$ARCH_FLAGS_X86 $RELEASE_CXXFLAGS" \
                 CPPFLAGS="$RELEASE_CPPFLAGS" \
                 LDFLAGS="$ARCH_FLAGS_X86 $RELEASE_LDFLAGS" \
-                cmake .. -G Xcode -DCMAKE_BUILD_TYPE="Release" \
+                cmake .. -G Ninja -DCMAKE_BUILD_TYPE="Release" \
                     -DALSOFT_UTILS=OFF -DALSOFT_NO_CONFIG_UTIL=ON -DALSOFT_EXAMPLES=OFF -DALSOFT_TESTS=OFF \
                     -DCMAKE_C_FLAGS="$ARCH_FLAGS_X86 $RELEASE_CFLAGS" \
                     -DCMAKE_CXX_FLAGS="$ARCH_FLAGS_X86 $RELEASE_CXXFLAGS" \
@@ -182,7 +182,7 @@ pushd "$top/openal-soft"
                 CXXFLAGS="$ARCH_FLAGS_ARM64 $RELEASE_CXXFLAGS" \
                 CPPFLAGS="$RELEASE_CPPFLAGS" \
                 LDFLAGS="$ARCH_FLAGS_ARM64 $RELEASE_LDFLAGS" \
-                cmake .. -G Xcode -DCMAKE_BUILD_TYPE="Release" \
+                cmake .. -G Ninja -DCMAKE_BUILD_TYPE="Release" \
                     -DALSOFT_UTILS=OFF -DALSOFT_NO_CONFIG_UTIL=ON -DALSOFT_EXAMPLES=OFF -DALSOFT_TESTS=OFF \
                     -DCMAKE_C_FLAGS="$ARCH_FLAGS_ARM64 $RELEASE_CFLAGS" \
                     -DCMAKE_CXX_FLAGS="$ARCH_FLAGS_ARM64 $RELEASE_CXXFLAGS" \
