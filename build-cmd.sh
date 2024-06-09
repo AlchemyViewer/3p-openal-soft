@@ -134,6 +134,7 @@ pushd "$top/openal-soft"
             pushd "build_release_x86"
                 CFLAGS="$OPTS_X86" \
                 CXXFLAGS="$OPTS_X86" \
+                LDFLAGS="-arch x86_64" \
                 cmake .. -G Ninja -DCMAKE_BUILD_TYPE="Release" \
                     -DALSOFT_UTILS=OFF -DALSOFT_NO_CONFIG_UTIL=ON -DALSOFT_EXAMPLES=OFF -DALSOFT_TESTS=OFF \
                     -DCMAKE_C_FLAGS="$OPTS_X86" \
@@ -164,6 +165,7 @@ pushd "$top/openal-soft"
             pushd "build_release_arm64"
                 CFLAGS="$OPTS_ARM64" \
                 CXXFLAGS="$OPTS_ARM64" \
+                LDFLAGS="-arch arm64" \
                 cmake .. -G Ninja -DCMAKE_BUILD_TYPE="Release" \
                     -DALSOFT_UTILS=OFF -DALSOFT_NO_CONFIG_UTIL=ON -DALSOFT_EXAMPLES=OFF -DALSOFT_TESTS=OFF \
                     -DCMAKE_C_FLAGS="$OPTS_ARM64" \
