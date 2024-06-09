@@ -4,7 +4,7 @@
     <key>package_description</key>
     <map>
       <key>canonical_repo</key>
-      <string>https://git.alchemyviewer.org/alchemy/thirdparty/3p-openal-soft</string>
+      <string>https://github.com/AlchemyViewer/3p-openal-soft</string>
       <key>copyright</key>
       <string>Copyright (C) 1999-2007 by authors.</string>
       <key>description</key>
@@ -63,7 +63,6 @@
           </map>
           <key>manifest</key>
           <array>
-            <string>lib/debug/*.dylib*</string>
             <string>lib/release/*.dylib*</string>
           </array>
           <key>name</key>
@@ -83,7 +82,6 @@
           </map>
           <key>manifest</key>
           <array>
-            <string>lib/debug/*.so*</string>
             <string>lib/release/*.so*</string>
           </array>
           <key>name</key>

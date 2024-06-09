@@ -426,7 +426,7 @@ pushd "$top/freealut"
             export SDKROOT=$(xcodebuild -version -sdk ${SDKNAME} Path)
 
             # Deploy Targets
-            X86_DEPLOY=10.15
+            X86_DEPLOY=11.0
             ARM64_DEPLOY=11.0
 
             # Setup build flags
@@ -445,39 +445,6 @@ pushd "$top/freealut"
 
             # x86 Deploy Target
             export MACOSX_DEPLOYMENT_TARGET=${X86_DEPLOY}
-
-            # Debug Build
-            mkdir -p "build_debug_x86"
-            pushd "build_debug_x86"
-                CFLAGS="$ARCH_FLAGS_X86 $DEBUG_CFLAGS" \
-                CXXFLAGS="$ARCH_FLAGS_X86 $DEBUG_CXXFLAGS" \
-                CPPFLAGS="$DEBUG_CPPFLAGS" \
-                LDFLAGS="$ARCH_FLAGS_X86 $DEBUG_LDFLAGS" \
-                cmake .. -G Xcode -DCMAKE_BUILD_TYPE="Debug" \
-                    -DOPENAL_LIB_DIR="$stage/lib/debug" -DOPENAL_INCLUDE_DIR="$stage/include" -DBUILD_STATIC=OFF \
-                    -DCMAKE_C_FLAGS="$ARCH_FLAGS_X86 $DEBUG_CFLAGS" \
-                    -DCMAKE_CXX_FLAGS="$ARCH_FLAGS_X86 $DEBUG_CXXFLAGS" \
-                    -DCMAKE_XCODE_ATTRIBUTE_GCC_OPTIMIZATION_LEVEL="0" \
-                    -DCMAKE_XCODE_ATTRIBUTE_GCC_FAST_MATH=NO \
-                    -DCMAKE_XCODE_ATTRIBUTE_GCC_GENERATE_DEBUGGING_SYMBOLS=YES \
-                    -DCMAKE_XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT=dwarf-with-dsym \
-                    -DCMAKE_XCODE_ATTRIBUTE_LLVM_LTO=NO \
-                    -DCMAKE_XCODE_ATTRIBUTE_DEAD_CODE_STRIPPING=NO \
-                    -DCMAKE_XCODE_ATTRIBUTE_CLANG_X86_VECTOR_INSTRUCTIONS=sse4.2 \
-                    -DCMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD="c++17" \
-                    -DCMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY="libc++" \
-                    -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED="NO" \
-                    -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED="NO" \
-                    -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY="" \
-                    -DCMAKE_OSX_ARCHITECTURES:STRING=x86_64 \
-                    -DCMAKE_OSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET} \
-                    -DCMAKE_OSX_SYSROOT=${SDKROOT} \
-                    -DCMAKE_MACOSX_RPATH=YES \
-                    -DCMAKE_INSTALL_PREFIX="$stage/alut_debug_x86"
-
-                cmake --build . --config Debug
-                cmake --install . --config Debug
-            popd
 
             # Release Build
             mkdir -p "build_release_x86"
@@ -510,41 +477,6 @@ pushd "$top/freealut"
 
                 cmake --build . --config Release
                 cmake --install . --config Release
-            popd
-
-            # ARM64 Deploy Target
-            export MACOSX_DEPLOYMENT_TARGET=${ARM64_DEPLOY}
-
-            # Debug Build
-            mkdir -p "build_debug_arm64"
-            pushd "build_debug_arm64"
-                CFLAGS="$ARCH_FLAGS_ARM64 $DEBUG_CFLAGS" \
-                CXXFLAGS="$ARCH_FLAGS_ARM64 $DEBUG_CXXFLAGS" \
-                CPPFLAGS="$DEBUG_CPPFLAGS" \
-                LDFLAGS="$ARCH_FLAGS_ARM64 $DEBUG_LDFLAGS" \
-                cmake .. -G Xcode -DCMAKE_BUILD_TYPE="Debug" \
-                    -DOPENAL_LIB_DIR="$stage/lib/debug" -DOPENAL_INCLUDE_DIR="$stage/include" -DBUILD_STATIC=OFF \
-                    -DCMAKE_C_FLAGS="$ARCH_FLAGS_ARM64 $DEBUG_CFLAGS" \
-                    -DCMAKE_CXX_FLAGS="$ARCH_FLAGS_ARM64 $DEBUG_CXXFLAGS" \
-                    -DCMAKE_XCODE_ATTRIBUTE_GCC_OPTIMIZATION_LEVEL="0" \
-                    -DCMAKE_XCODE_ATTRIBUTE_GCC_FAST_MATH=NO \
-                    -DCMAKE_XCODE_ATTRIBUTE_GCC_GENERATE_DEBUGGING_SYMBOLS=YES \
-                    -DCMAKE_XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT=dwarf-with-dsym \
-                    -DCMAKE_XCODE_ATTRIBUTE_LLVM_LTO=NO \
-                    -DCMAKE_XCODE_ATTRIBUTE_DEAD_CODE_STRIPPING=NO \
-                    -DCMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD="c++17" \
-                    -DCMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY="libc++" \
-                    -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED="NO" \
-                    -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED="NO" \
-                    -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY="" \
-                    -DCMAKE_OSX_ARCHITECTURES:STRING=arm64 \
-                    -DCMAKE_OSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET} \
-                    -DCMAKE_OSX_SYSROOT=${SDKROOT} \
-                    -DCMAKE_MACOSX_RPATH=YES \
-                    -DCMAKE_INSTALL_PREFIX="$stage/alut_debug_arm64"
-
-                cmake --build . --config Debug
-                cmake --install . --config Debug
             popd
 
             # Release Build
@@ -580,15 +512,7 @@ pushd "$top/freealut"
             popd
 
             # create fat libs
-            lipo -create ${stage}/alut_debug_x86/lib/libalut.dylib ${stage}/alut_debug_arm64/lib/libalut.dylib -output ${stage}/lib/debug/libalut.dylib
             lipo -create ${stage}/alut_release_x86/lib/libalut.dylib ${stage}/alut_release_arm64/lib/libalut.dylib -output ${stage}/lib/release/libalut.dylib
-
-            # create debug bundles
-            pushd "${stage}/lib/debug"
-                install_name_tool -id "@rpath/libalut.dylib" "libalut.dylib"
-                dsymutil libalut.dylib
-                strip -x -S libalut.dylib
-            popd
 
             pushd "${stage}/lib/release"
                 install_name_tool -id "@rpath/libalut.dylib" "libalut.dylib"
@@ -661,21 +585,7 @@ pushd "$top/freealut"
 
             # Create staging dirs
             mkdir -p "$stage/include/AL"
-            mkdir -p "${stage}/lib/debug"
             mkdir -p "${stage}/lib/release"
-
-            # Debug Build
-            mkdir -p "build_debug"
-            pushd "build_debug"
-                cmake -E env CFLAGS="$DEBUG_CFLAGS" CXXFLAGS="$DEBUG_CXXFLAGS" \
-                cmake .. -DCMAKE_BUILD_TYPE="Debug" \
-                    -DOPENAL_LIB_DIR="$stage/lib/debug" -DOPENAL_INCLUDE_DIR="$stage/include" \
-                    -DBUILD_STATIC=OFF -DCMAKE_INSTALL_PREFIX="$stage"
-
-                cmake --build . -j$JOBS --config Debug --clean-first
-
-                cp -a libalut.so* "$stage/lib/debug/"
-            popd
 
             # Release Build
             mkdir -p "build_release"
