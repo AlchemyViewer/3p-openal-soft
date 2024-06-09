@@ -259,7 +259,7 @@ pushd "$top/openal-soft"
             mkdir -p "build_release"
             pushd "build_release"
                 cmake -E env CFLAGS="$RELEASE_CFLAGS" CXXFLAGS="$RELEASE_CXXFLAGS" \
-                cmake .. -DCMAKE_BUILD_TYPE="Release" \
+                cmake .. -G Ninja -DCMAKE_BUILD_TYPE="Release" \
                     -DALSOFT_UTILS=OFF -DALSOFT_NO_CONFIG_UTIL=ON -DALSOFT_EXAMPLES=OFF -DALSOFT_TESTS=OFF \
                     -DCMAKE_INSTALL_PREFIX="$stage"
 
@@ -353,7 +353,7 @@ pushd "$top/freealut"
                 CXXFLAGS="$ARCH_FLAGS_X86 $RELEASE_CXXFLAGS" \
                 CPPFLAGS="$RELEASE_CPPFLAGS" \
                 LDFLAGS="$ARCH_FLAGS_X86 $RELEASE_LDFLAGS" \
-                cmake .. -G Xcode -DCMAKE_BUILD_TYPE="Release" \
+                cmake .. -G Ninja -DCMAKE_BUILD_TYPE="Release" \
                     -DOPENAL_LIB_DIR="$stage/lib/release" -DOPENAL_INCLUDE_DIR="$stage/include" -DBUILD_STATIC=OFF \
                     -DCMAKE_C_FLAGS="$ARCH_FLAGS_X86 $RELEASE_CFLAGS" \
                     -DCMAKE_CXX_FLAGS="$ARCH_FLAGS_X86 $RELEASE_CXXFLAGS" \
@@ -385,7 +385,7 @@ pushd "$top/freealut"
                 CXXFLAGS="$ARCH_FLAGS_ARM64 $RELEASE_CXXFLAGS" \
                 CPPFLAGS="$RELEASE_CPPFLAGS" \
                 LDFLAGS="$ARCH_FLAGS_ARM64 $RELEASE_LDFLAGS" \
-                cmake .. -G Xcode -DCMAKE_BUILD_TYPE="Release" \
+                cmake .. -G Ninja -DCMAKE_BUILD_TYPE="Release" \
                     -DOPENAL_LIB_DIR="$stage/lib/release" -DOPENAL_INCLUDE_DIR="$stage/include" -DBUILD_STATIC=OFF \
                     -DCMAKE_C_FLAGS="$ARCH_FLAGS_ARM64 $RELEASE_CFLAGS" \
                     -DCMAKE_CXX_FLAGS="$ARCH_FLAGS_ARM64 $RELEASE_CXXFLAGS" \
@@ -470,8 +470,6 @@ pushd "$top/freealut"
             DEBUG_CPPFLAGS="-DPIC"
             RELEASE_CPPFLAGS="-DPIC"
 
-            JOBS=`cat /proc/cpuinfo | grep processor | wc -l`
-
             # Handle any deliberate platform targeting
             if [ -z "${TARGET_CPPFLAGS:-}" ]; then
                 # Remove sysroot contamination from build environment
@@ -489,11 +487,11 @@ pushd "$top/freealut"
             mkdir -p "build_release"
             pushd "build_release"
                 cmake -E env CFLAGS="$RELEASE_CFLAGS" CXXFLAGS="$RELEASE_CXXFLAGS" \
-                cmake .. -DCMAKE_BUILD_TYPE="Release" \
+                cmake .. -G Ninja -DCMAKE_BUILD_TYPE="Release" \
                     -DOPENAL_LIB_DIR="$stage/lib/release" -DOPENAL_INCLUDE_DIR="$stage/include" \
                     -DBUILD_STATIC=OFF -DCMAKE_INSTALL_PREFIX="$stage"
 
-                cmake --build . -j$JOBS --config Release --clean-first
+                cmake --build . -j$AUTOBUILD_CPU_COUNT --config Release --clean-first
                 
                 cp -a libalut.so* "$stage/lib/release/"
             popd
