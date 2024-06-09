@@ -134,23 +134,14 @@ pushd "$top/openal-soft"
             pushd "build_release_x86"
                 CFLAGS="$OPTS_X86" \
                 CXXFLAGS="$OPTS_X86" \
-                LDFLAGS="-arch x86_64" \
+                LDFLAGS="-arch x86_64 -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET} -Wl,-headerpad_max_install_names" \
                 cmake .. -G Ninja -DCMAKE_BUILD_TYPE="Release" \
                     -DALSOFT_UTILS=OFF -DALSOFT_NO_CONFIG_UTIL=ON -DALSOFT_EXAMPLES=OFF -DALSOFT_TESTS=OFF \
                     -DCMAKE_C_FLAGS="$OPTS_X86" \
                     -DCMAKE_CXX_FLAGS="$OPTS_X86" \
-                    -DCMAKE_XCODE_ATTRIBUTE_GCC_OPTIMIZATION_LEVEL="fast" \
-                    -DCMAKE_XCODE_ATTRIBUTE_GCC_FAST_MATH=YES \
-                    -DCMAKE_XCODE_ATTRIBUTE_GCC_GENERATE_DEBUGGING_SYMBOLS=YES \
-                    -DCMAKE_XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT=dwarf-with-dsym \
-                    -DCMAKE_XCODE_ATTRIBUTE_LLVM_LTO=YES \
-                    -DCMAKE_XCODE_ATTRIBUTE_DEAD_CODE_STRIPPING=NO \
                     -DCMAKE_XCODE_ATTRIBUTE_CLANG_X86_VECTOR_INSTRUCTIONS=sse4.2 \
-                    -DCMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD="c++17" \
-                    -DCMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY="libc++" \
                     -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED="NO" \
                     -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED="NO" \
-                    -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY="" \
                     -DCMAKE_OSX_ARCHITECTURES:STRING=x86_64 \
                     -DCMAKE_OSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET} \
                     -DCMAKE_MACOSX_RPATH=YES \
@@ -165,22 +156,13 @@ pushd "$top/openal-soft"
             pushd "build_release_arm64"
                 CFLAGS="$OPTS_ARM64" \
                 CXXFLAGS="$OPTS_ARM64" \
-                LDFLAGS="-arch arm64" \
+                LDFLAGS="-arch arm64 -mmacosx-version-min=${MACOSX_DEPLOYMENT_TARGET} -Wl,-headerpad_max_install_names" \
                 cmake .. -G Ninja -DCMAKE_BUILD_TYPE="Release" \
                     -DALSOFT_UTILS=OFF -DALSOFT_NO_CONFIG_UTIL=ON -DALSOFT_EXAMPLES=OFF -DALSOFT_TESTS=OFF \
                     -DCMAKE_C_FLAGS="$OPTS_ARM64" \
                     -DCMAKE_CXX_FLAGS="$OPTS_ARM64" \
-                    -DCMAKE_XCODE_ATTRIBUTE_GCC_OPTIMIZATION_LEVEL="fast" \
-                    -DCMAKE_XCODE_ATTRIBUTE_GCC_FAST_MATH=YES \
-                    -DCMAKE_XCODE_ATTRIBUTE_GCC_GENERATE_DEBUGGING_SYMBOLS=YES \
-                    -DCMAKE_XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT=dwarf-with-dsym \
-                    -DCMAKE_XCODE_ATTRIBUTE_LLVM_LTO=YES \
-                    -DCMAKE_XCODE_ATTRIBUTE_DEAD_CODE_STRIPPING=NO \
-                    -DCMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD="c++17" \
-                    -DCMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY="libc++" \
                     -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED="NO" \
                     -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED="NO" \
-                    -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY="" \
                     -DCMAKE_OSX_ARCHITECTURES:STRING=arm64 \
                     -DCMAKE_OSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET} \
                     -DCMAKE_MACOSX_RPATH=YES \
