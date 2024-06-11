@@ -15,6 +15,10 @@ jobs:
           build-variables-ref: alchemy
           apt-packages: ninja-build libasound2-dev libpulse-dev libpipewire-0.3-dev libjack-dev libdbus-1-dev
           brew-packages: ninja
+          setup-macos-codesign: true
+          macos-p12-base64: ${{ secrets.APPLE_CERT_BASE64 }}
+          macos-p12-password: ${{ secrets.APPLE_CERT_PASSWORD }}
+          macos-p12-id: ${{ secrets.APPLE_CERT_ID }}
   release:
     needs: build
     runs-on: [ubuntu-latest]
