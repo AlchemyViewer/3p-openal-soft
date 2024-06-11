@@ -49,27 +49,6 @@ source_environment_tempfile="$stage/source_environment.sh"
 "$autobuild" source_environment > "$source_environment_tempfile"
 . "$source_environment_tempfile"
 
-# Restore all .sos
-restore_sos ()
-{
-    for solib in "${stage}"/packages/lib/release/lib*.so*.disable; do
-        if [ -f "$solib" ]; then
-            mv -f "$solib" "${solib%.disable}"
-        fi
-    done
-}
-
-
-# Restore all .dylibs
-restore_dylibs ()
-{
-    for dylib in "$stage/packages/lib"/release/*.dylib.disable; do
-        if [ -f "$dylib" ]; then
-            mv "$dylib" "${dylib%.disable}"
-        fi
-    done
-}
-
 pushd "$top/openal-soft"
     case "$AUTOBUILD_PLATFORM" in
         windows*)
