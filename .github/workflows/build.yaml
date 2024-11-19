@@ -1,6 +1,6 @@
 name: Build
 
-on: 
+on:
   pull_request:
   push:
     branches: [main]
@@ -10,7 +10,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows-2022, macos-13, ubuntu-22.04]
+        os: [windows-2022, macos-15, ubuntu-22.04]
         addrsize: ["64"]
     continue-on-error: false
     runs-on: ${{ matrix.os }}
@@ -30,9 +30,9 @@ jobs:
             libpulse-dev libpipewire-0.3-dev \
             libjack-dev libdbus-1-dev
 
-      - uses: secondlife/action-autobuild@v4
+      - uses: secondlife/action-autobuild@v5
         with:
-          addrsize: "64" 
+          addrsize: "64"
   release:
     needs: build
     runs-on: [ubuntu-latest]
