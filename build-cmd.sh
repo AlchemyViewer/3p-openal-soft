@@ -61,12 +61,30 @@ pushd "$top/openal-soft"
             mkdir -p "${stage}/lib/debug"
             mkdir -p "${stage}/lib/release"
 
-            opts="$LL_BUILD_RELEASE"
-            plainopts="$(remove_cxxstd $opts)"
+            # Debug Build
+            mkdir -p "build_debug"
+            pushd "build_debug"
+                opts="$LL_BUILD_DEBUG"
+                plainopts="$(remove_cxxstd $opts)"
+
+                cmake .. -G "Ninja Multi-Config" -DCMAKE_BUILD_TYPE="Debug" \
+                    -DALSOFT_UTILS=OFF -DALSOFT_NO_CONFIG_UTIL=ON -DALSOFT_EXAMPLES=OFF -DALSOFT_TESTS=OFF \
+                    -DCMAKE_INSTALL_PREFIX="$(cygpath -m "$stage")" \
+                    -DCMAKE_C_FLAGS="$plainopts" \
+                    -DCMAKE_CXX_FLAGS="$opts" \
+                    -DCMAKE_SHARED_LINKER_FLAGS="/DEBUG:FULL"
+
+                cmake --build . --config Debug
+
+                cp -a Debug/OpenAL32.{lib,dll,exp,pdb} "$stage/lib/debug/"
+            popd
 
             # Release Build
-            mkdir -p "build"
-            pushd "build"
+            mkdir -p "build_release"
+            pushd "build_release"
+                opts="$LL_BUILD_RELEASE"
+                plainopts="$(remove_cxxstd $opts)"
+
                 cmake .. -G "Ninja Multi-Config" -DCMAKE_BUILD_TYPE="Release" \
                     -DALSOFT_UTILS=OFF -DALSOFT_NO_CONFIG_UTIL=ON -DALSOFT_EXAMPLES=OFF -DALSOFT_TESTS=OFF \
                     -DCMAKE_INSTALL_PREFIX="$(cygpath -m "$stage")" \
@@ -74,7 +92,7 @@ pushd "$top/openal-soft"
                     -DCMAKE_CXX_FLAGS="$opts" \
                     -DCMAKE_SHARED_LINKER_FLAGS="/DEBUG:FULL"
 
-                cmake --build . --config Release --clean-first
+                cmake --build . --config Release
 
                 cp -a Release/OpenAL32.{lib,dll,exp,pdb} "$stage/lib/release/"
             popd
@@ -180,12 +198,30 @@ pushd "$top/freealut"
             mkdir -p "${stage}/lib/debug"
             mkdir -p "${stage}/lib/release"
 
-            opts="$LL_BUILD_RELEASE"
-            plainopts="$(remove_cxxstd $opts)"
+            # Debug Build
+            mkdir -p "build_debug"
+            pushd "build_debug"
+                opts="$LL_BUILD_DEBUG"
+                plainopts="$(remove_cxxstd $opts)"
+
+                cmake .. -G "Ninja Multi-Config" -DCMAKE_BUILD_TYPE="Debug" \
+                    -DOPENAL_LIB_DIR="$(cygpath -m "$stage/lib/debug")" -DOPENAL_INCLUDE_DIR="$(cygpath -m "$stage/include")" \
+                    -DBUILD_STATIC=OFF -DCMAKE_INSTALL_PREFIX="$(cygpath -m "$stage")" \
+                    -DCMAKE_C_FLAGS="$plainopts" \
+                    -DCMAKE_CXX_FLAGS="$opts" \
+                    -DCMAKE_SHARED_LINKER_FLAGS="/DEBUG:FULL"
+
+                cmake --build . --config Debug --clean-first
+
+                cp -a Debug/alut.{lib,dll,exp,pdb} "$stage/lib/debug/"
+            popd
 
             # Release Build
-            mkdir -p "build"
-            pushd "build"
+            mkdir -p "build_release"
+            pushd "build_release"
+                opts="$LL_BUILD_RELEASE"
+                plainopts="$(remove_cxxstd $opts)"
+
                 cmake .. -G "Ninja Multi-Config" -DCMAKE_BUILD_TYPE="Release" \
                     -DOPENAL_LIB_DIR="$(cygpath -m "$stage/lib/release")" -DOPENAL_INCLUDE_DIR="$(cygpath -m "$stage/include")" \
                     -DBUILD_STATIC=OFF -DCMAKE_INSTALL_PREFIX="$(cygpath -m "$stage")" \
